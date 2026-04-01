@@ -1,0 +1,120 @@
+{
+  "name": "toggleterm-vscode",
+  "displayName": "ToggleTerm",
+  "description": "Toggle terminal instances for TUIs with UI state restoration",
+  "version": "0.0.1",
+  "publisher": "toggleterm",
+  "engines": {
+    "vscode": "^1.70.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "keywords": [
+    "terminal",
+    "toggleterm",
+    "tui",
+    "lazygit",
+    "toggle"
+  ],
+  "activationEvents": [
+    "onStartupFinished"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "toggleterm.toggle",
+        "title": "ToggleTerm: Toggle Terminal",
+        "description": "Toggle a named terminal. Pass { \"name\": \"<terminal-name>\" } as args."
+      },
+      {
+        "command": "toggleterm.select",
+        "title": "ToggleTerm: Select Terminal to Toggle"
+      },
+      {
+        "command": "toggleterm.killAll",
+        "title": "ToggleTerm: Kill All Managed Terminals"
+      }
+    ],
+    "configuration": {
+      "title": "ToggleTerm",
+      "properties": {
+        "toggleterm.terminals": {
+          "type": "array",
+          "description": "List of named terminals to manage.",
+          "default": [],
+          "items": {
+            "type": "object",
+            "required": [
+              "name",
+              "command"
+            ],
+            "properties": {
+              "name": {
+                "type": "string",
+                "description": "Unique name for this terminal."
+              },
+              "command": {
+                "type": "string",
+                "description": "Shell command to run (e.g. 'lazygit', 'htop', 'ranger')."
+              },
+              "location": {
+                "type": "string",
+                "enum": [
+                  "panel",
+                  "editor",
+                  "floating"
+                ],
+                "default": "floating",
+                "description": "Where to display the terminal. 'panel' = bottom panel, 'editor' = editor tab in current column, 'floating' = editor tab in a new column beside."
+              },
+              "cwd": {
+                "type": "string",
+                "description": "Working directory. Supports ${workspaceFolder} and ${fileDirname}."
+              },
+              "env": {
+                "type": "object",
+                "description": "Additional environment variables.",
+                "additionalProperties": {
+                  "type": "string"
+                }
+              },
+              "focus": {
+                "type": "boolean",
+                "default": true,
+                "description": "Whether to focus the terminal when opened."
+              },
+              "closeOnExit": {
+                "type": "boolean",
+                "default": true,
+                "description": "Automatically close the terminal when the command exits and restore UI state."
+              }
+            },
+            "additionalProperties": false
+          }
+        }
+      }
+    },
+    "keybindings": [
+      {
+        "command": "toggleterm.select",
+        "key": "ctrl+shift+`",
+        "mac": "ctrl+shift+`"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "eslint src",
+    "package": "vsce package"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "@types/vscode": "^1.70.0",
+    "@vscode/vsce": "3.7.1",
+    "typescript": "^5.3.0"
+  }
+}
